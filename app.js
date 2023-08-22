@@ -12,6 +12,15 @@ require("dotenv").config();
 
 var app = express();
 
+// Set up rate limiter: maximum of twenty requests per minute
+const RateLimit = require("express-rate-limit");
+const limiter = RateLimit({
+  windowMs: 1 * 10 * 1000, // 10 seconds
+  max: 10,
+});
+// Apply rate limiter to all requests
+app.use(limiter);
+
 // Set up mongoose connection
 const mongoose = require("mongoose");
 mongoose.set("strictQuery", false);

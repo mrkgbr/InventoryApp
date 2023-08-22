@@ -20,6 +20,9 @@ dependencies:
   express-async-handler:
     specifier: ^1.2.0
     version: 1.2.0
+  express-rate-limit:
+    specifier: ^6.9.0
+    version: 6.9.0(express@4.16.1)
   http-errors:
     specifier: ~1.6.3
     version: 1.6.3
@@ -403,6 +406,15 @@ packages:
 
   /express-async-handler@1.2.0:
     resolution: {integrity: sha512-rCSVtPXRmQSW8rmik/AIb2P0op6l7r1fMW538yyvTMltCO4xQEWMmobfrIxN2V1/mVrgxB8Az3reYF6yUZw37w==}
+    dev: false
+
+  /express-rate-limit@6.9.0(express@4.16.1):
+    resolution: {integrity: sha512-AnISR3V8qy4gpKM62/TzYdoFO9NV84fBx0POXzTryHU/qGUJBWuVGd+JhbvtVmKBv37t8/afmqdnv16xWoQxag==}
+    engines: {node: '>= 14.0.0'}
+    peerDependencies:
+      express: ^4 || ^5
+    dependencies:
+      express: 4.16.1
     dev: false
 
   /express@4.16.1:
