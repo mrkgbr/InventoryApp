@@ -26,7 +26,7 @@ exports.brand_detail = asyncHandler(async (req, res, next) => {
 
   res.render("brand_detail", {
     title: "Brand detail",
-    brand,
+    brand: brand,
     brand_items: itemsInBrand,
   });
 });
