@@ -10,3 +10,11 @@ exports.item_list = asyncHandler(async (req, res, next) => {
     .exec();
   res.render("item_list", { title: "Item List", list_item: allItems });
 });
+
+exports.item_detail = asyncHandler(async (req, res, next) => {
+  const item = await Item.findById(req.params.id)
+    .populate("brand")
+    .populate("category")
+    .exec();
+  res.render("item_detail", { title: "Item Detail", detail_item: item });
+});

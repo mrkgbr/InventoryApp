@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1 Item: #{detail_item.name}
+
+  p #[strong Brand:]
+    a(href=detail_item.brand.url) #{detail_item.brand.name}
+  p #[strong Category:]
+    a(href=detail_item.category.url) #{detail_item.category.name}
+  p #[strong Description:] #{detail_item.description}
+
+
+  hr
+  p
+    a(href=detail_item.url+'/delete') Delete Book
+  p
+    a(href=detail_item.url+'/update') Update Book

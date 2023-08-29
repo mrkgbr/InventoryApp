@@ -25,8 +25,11 @@ exports.brand_detail = asyncHandler(async (req, res, next) => {
   }
 
   res.render("brand_detail", {
-    title: "Brand detail",
     brand: brand,
     brand_items: itemsInBrand,
   });
 });
+
+exports.brand_create_get = (req, res, next) => {
+  res.render("brand_form", { title: "Create Brand" });
+};

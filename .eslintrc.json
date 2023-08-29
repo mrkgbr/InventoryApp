@@ -10,7 +10,7 @@
   },
   "rules": {
     "quotes": ["error", "double"],
-    "no-unused-vars": ["error", { "argsIgnorePattern": "next" }],
+    "no-unused-vars": ["error", { "argsIgnorePattern": "next|req|res" }],
     "consistent-return": "off",
     "no-underscore-dangle": "off",
     "comma-dangle": "off",

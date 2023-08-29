@@ -26,8 +26,11 @@ exports.category_detail = asyncHandler(async (req, res, next) => {
   }
 
   res.render("category_detail", {
-    title: "Category detail",
     category,
     category_items: itemInCategory,
   });
 });
+
+exports.category_create_get = (req, res, next) => {
+  res.render("category_form", { title: "Create Category" });
+};
