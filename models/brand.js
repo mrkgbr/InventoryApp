@@ -9,7 +9,7 @@ const BrandSchema = new Schema({
 });
 
 // Virtual for this brand instance URL.
-BrandSchema.virtual("url").get(() => {
+BrandSchema.virtual("url").get(function () {
   return `/inventory/brand/${this._id}`;
 });
 
