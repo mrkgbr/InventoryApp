@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const Schema = mongoose.Schema;
+const { Schema } = mongoose;
 
 const ItemSchema = new Schema({
   name: { type: String, required: true },
@@ -12,9 +12,7 @@ const ItemSchema = new Schema({
 });
 
 // Virtual for this item instance URL.
-ItemSchema.virtual("url").get(function () {
-  return "/inventory/item/" + this._id;
-});
+ItemSchema.virtual("url").get(() => `/inventory/item/${this._id}`);
 
 // Export model.
 module.exports = mongoose.model("Item", ItemSchema);

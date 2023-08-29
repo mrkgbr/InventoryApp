@@ -1,6 +1,6 @@
+const asyncHandler = require("express-async-handler");
 const Brand = require("../models/brand");
 const Item = require("../models/item");
-const asyncHandler = require("express-async-handler");
 
 // Display list of all Category.
 exports.brand_list = asyncHandler(async (req, res, next) => {
@@ -26,7 +26,7 @@ exports.brand_detail = asyncHandler(async (req, res, next) => {
 
   res.render("brand_detail", {
     title: "Brand detail",
-    brand: brand,
+    brand,
     brand_items: itemsInBrand,
   });
 });

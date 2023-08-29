@@ -1,8 +1,7 @@
+const asyncHandler = require("express-async-handler");
 const Item = require("../models/item");
 const Brand = require("../models/brand");
 const Category = require("../models/category");
-
-const asyncHandler = require("express-async-handler");
 
 exports.index = asyncHandler(async (req, res, next) => {
   const [numItems, numBrands, numCategories] = await Promise.all([
