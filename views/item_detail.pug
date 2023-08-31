@@ -8,10 +8,12 @@ block content
   p #[strong Category:]
     a(href=detail_item.category.url) #{detail_item.category.name}
   p #[strong Description:] #{detail_item.description}
+  p #[strong Price:] #{detail_item.price} EUR
+  p #[strong Number of stock:] #{detail_item.number_of_stock}
 
 
   hr
   p
-    a(href=detail_item.url+'/delete') Delete Book
+    a(href=detail_item.url+'/delete') Delete Item
   p
-    a(href=detail_item.url+'/update') Update Book
+    a(href=detail_item.url+'/update') Update Item
