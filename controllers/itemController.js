@@ -41,7 +41,10 @@ exports.item_create_get = asyncHandler(async (req, res, next) => {
 
 exports.item_create_post = [
   // Validate and sanitize fields.
-  body("name", "Name must not be empty.").trim().isLength({ min: 2 }).escape(),
+  body("name", "Product name must not be empty and at least 2 character long.")
+    .trim()
+    .isLength({ min: 2 })
+    .escape(),
   body("description", "Description must not be empty.")
     .trim()
     .isLength({ min: 1 })
