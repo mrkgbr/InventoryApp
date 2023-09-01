@@ -5,20 +5,20 @@ block content
 
   form(method='POST' action='')
     div.form-group
-      label(for='product') Product:
-      input#product.form-control(type='text', placeholder='Product name' name='product' required='true' value=(undefined===item ? '' : item.name) )
+      label(for='name') Product:
+      input#name.form-control(type='text', placeholder='Product name' name='name' required='true' value=(undefined===item ? '' : item.name) )
     div.form-group
       label(for='brand') Brand:
       select#brand.form-control(type='select', placeholder='Select brand' name='brand' required='true' )
         - brands.sort(function(a, b) {let textA = a.name.toUpperCase(); let textB = b.name.toUpperCase(); return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;});
         for brand in brands
           if item
-            option(value=brand._id selected=(brand._id.toString()===book.brand._id.toString() ? 'selected' : false) ) #{brand.name}
+            option(value=brand._id selected=(brand._id.toString()===item.brand.toString() ? 'selected' : false) ) #{brand.name}
           else
             option(value=brand._id) #{brand.name}
     div.form-group
       label(for='description') Description:
-      textarea#description.form-control(type='textarea', placeholder='Description' name='description' required='true') #{undefined===item ? '' : book.description}
+      textarea#description.form-control(type='textarea', placeholder='Description' name='description' required='true') #{undefined===item ? '' : item.description}
     div.form-group
       label(for='price') Price:
       input#price.form-control(type='number', name='price' required='true' value=(undefined===item ? '' : item.price) )

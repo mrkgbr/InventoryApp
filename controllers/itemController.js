@@ -39,58 +39,61 @@ exports.item_create_get = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.item_create_post = asyncHandler(async (req, res, next) => {
+exports.item_create_post = [
   // Validate and sanitize fields.
-  body("name", "Title must not be empty.").trim().isLength({ min: 1 }).escape();
-  body("description", "Author must not be empty.")
+  body("name", "Name must not be empty.").trim().isLength({ min: 2 }).escape(),
+  body("description", "Description must not be empty.")
     .trim()
     .isLength({ min: 1 })
-    .escape();
-  body("price", "Summary must not be empty.")
+    .escape(),
+  body("price", "Price must not be empty.")
     .trim()
     .isLength({ min: 1 })
-    .escape();
-  body("brand.*").escape();
-  body("category.*").escape();
+    .escape(),
+  body("brand.*").escape(),
+  body("category.*").escape(),
   // Process request after validation and sanitization.
 
-  // Extract the validation errors from a request.
-  const errors = validationResult(req);
+  asyncHandler(async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
 
-  // Create a Book object with escaped and trimmed data.
-  const item = new Item({
-    name: req.body.product,
-    description: req.body.description,
-    price: req.body.price,
-    number_of_stock: req.body.numberOfStock,
-    brand: req.body.brand,
-    category: req.body.category,
-  });
-
-  if (!errors.isEmpty()) {
-    // There are errors. Render form again with sanitized values/error messages.
-    // Get all authors and genres for form.
-    const [allBrands, allCategories] = await Promise.all([
-      Brand.find().exec(),
-      Category.find().exec(),
-    ]);
-    // Mark our selected genres as checked.
-    for (const category of allCategories) {
-      if (item.category.includes(category._id)) {
-        // Current genre is selected. Set "checked" flag.
-        category.checked = "true";
-      }
-    }
-    res.render("item_form", {
-      title: "Create Item",
-      brand: allBrands,
-      category: allCategories,
-      item: item,
-      errors: errors.array(),
+    // Create a Book object with escaped and trimmed data.
+    const item = new Item({
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      number_of_stock: req.body.numberOfStock,
+      brand: req.body.brand,
+      category: req.body.category,
     });
-  } else {
-    // Data from form is valid. Save book.
-    await item.save();
-    res.redirect(item.url);
-  }
-});
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render form again with sanitized values/error messages.
+      // Get all brands and categories for form.
+      const [allBrands, allCategories] = await Promise.all([
+        Brand.find().exec(),
+        Category.find().exec(),
+      ]);
+      // Mark our selected category as checked.
+      for (const category of allCategories) {
+        if (category._id.toString() === req.body.category) {
+          // Current category is selected. Set "checked" flag.
+          category.checked = "true";
+          console.log("true");
+        }
+      }
+      res.render("item_form", {
+        title: "Create Item",
+        brands: allBrands,
+        categories: allCategories,
+        item: item,
+        errors: errors.array(),
+      });
+    } else {
+      // Data from form is valid. Save book.
+      await item.save();
+      res.redirect(item.url);
+    }
+  }),
+];
