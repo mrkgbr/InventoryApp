@@ -90,3 +90,22 @@ exports.category_delete_get = asyncHandler(async (req, res, next) => {
     category_items: categoriesInItem,
   });
 });
+
+exports.category_delete_post = asyncHandler(async (req, res, next) => {
+  const [category, categoriesInItem] = await Promise.all([
+    Category.findById(req.params.id).exec(),
+    Item.find({ category: req.params.id }, "name").exec(),
+  ]);
+
+  if (categoriesInItem.length > 0) {
+    res.render("category_delete", {
+      title: "Delete Category",
+      category,
+      category_items: categoriesInItem,
+    });
+    return;
+  } else {
+    await Category.findByIdAndDelete(req.params.id);
+    res.redirect("/inventory/categories");
+  }
+});
