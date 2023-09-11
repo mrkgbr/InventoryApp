@@ -21,6 +21,7 @@ router.get("/category/:id", category_controller.category_detail);
 // BRAND ROUTES //
 router.get("/brands", brand_controller.brand_list);
 router.get("/brand/create", brand_controller.brand_create_get);
+router.post("/brand/create", brand_controller.brandCreatePost);
 router.get("/brand/:id", brand_controller.brand_detail);
 
 // ITEM ROUTES //

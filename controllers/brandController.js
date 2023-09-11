@@ -1,6 +1,7 @@
 const asyncHandler = require("express-async-handler");
 const Brand = require("../models/brand");
 const Item = require("../models/item");
+const { body, validationResult } = require("express-validator");
 
 // Display list of all Category.
 exports.brand_list = asyncHandler(async (req, res, next) => {
@@ -33,3 +34,42 @@ exports.brand_detail = asyncHandler(async (req, res, next) => {
 exports.brand_create_get = (req, res, next) => {
   res.render("brand_form", { title: "Create Brand" });
 };
+
+exports.brandCreatePost = [
+  // Validate and sanitize
+  body("name", "Brand name must contain at least 3 characters")
+    .trim()
+    .notEmpty({
+      ignore_whitespace: true,
+    })
+    .escape(),
+  asyncHandler(async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+    // Create a brand object with validated data
+    const brand = new Brand({ name: req.body.name });
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again with sanitized values/error messages.
+      res.render("category_form", {
+        title: "Create Brand",
+        brand,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data from form is valid.
+      // Check if Brand with same name (case insensitive) already exists.
+      const brandExists = await Brand.findOne({ name: req.body.name })
+        .collation({ locale: "en", strength: 2 })
+        .exec();
+      if (brandExists) {
+        // Genre exists, redirect to its detail page.
+        res.redirect(brandExists.url);
+      } else {
+        await brand.save();
+        // New category saved. Redirect to category detail page.
+        res.redirect(brand.url);
+      }
+    }
+  }),
+];
