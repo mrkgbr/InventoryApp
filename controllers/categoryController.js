@@ -47,7 +47,7 @@ exports.category_create_post = [
     // Extract the validation errors from a request.
     const errors = validationResult(req);
 
-    // Create a genre object with escaped and trimmed data.
+    // Create a category object with escaped and trimmed data.
     const category = new Category({ name: req.body.name });
 
     if (!errors.isEmpty()) {
@@ -82,13 +82,15 @@ exports.category_delete_get = asyncHandler(async (req, res, next) => {
     Item.find({ category: req.params.id }, "name").exec(),
   ]);
 
-  if (category === null) res.redirect("/inventory/categories");
-
-  res.render("category_delete", {
-    title: "Delete Category",
-    category,
-    category_items: categoriesInItem,
-  });
+  if (category === null) {
+    res.redirect("/inventory/categories");
+  } else {
+    res.render("category_delete", {
+      title: "Delete Category",
+      category,
+      category_items: categoriesInItem,
+    });
+  }
 });
 
 exports.category_delete_post = asyncHandler(async (req, res, next) => {

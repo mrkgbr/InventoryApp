@@ -80,13 +80,15 @@ exports.brandDeleteGet = asyncHandler(async (req, res, next) => {
     Item.find({ brand: req.params.id }, "name").exec(),
   ]);
 
-  if (brand === null) res.redirect("/inventory/brands");
-
-  res.render("brand_delete", {
-    title: "Delete Brand",
-    brand,
-    brand_items: brandsInItem,
-  });
+  if (brand === null) {
+    res.redirect("/inventory/brands");
+  } else {
+    res.render("brand_delete", {
+      title: "Delete Brand",
+      brand,
+      brand_items: brandsInItem,
+    });
+  }
 });
 
 exports.brandDeletePost = asyncHandler(async (req, res, next) => {
