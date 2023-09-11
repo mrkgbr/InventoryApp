@@ -100,3 +100,25 @@ exports.item_create_post = [
     }
   }),
 ];
+
+exports.itemDeleteGet = asyncHandler(async (req, res, next) => {
+  const item = await Item.findById(req.params.id);
+  if (item === null) {
+    res.redirect("/inventory/items");
+  } else {
+    res.render("item_delete", {
+      title: "Delete Item",
+      item,
+    });
+  }
+});
+
+exports.itemDeletePost = asyncHandler(async (req, res, next) => {
+  const item = await Item.findById(req.params.id);
+  if (item === null) {
+    res.redirect("/inventory/items");
+  } else {
+    await Item.findByIdAndRemove(req.params.id);
+    res.redirect("/inventory/items");
+  }
+});
