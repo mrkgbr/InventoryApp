@@ -37,7 +37,7 @@ exports.brand_create_get = (req, res, next) => {
 
 exports.brandCreatePost = [
   // Validate and sanitize
-  body("name", "Brand name must contain at least 3 characters")
+  body("name", "Brand name must contain at least 1 characters")
     .trim()
     .notEmpty({
       ignore_whitespace: true,
@@ -73,3 +73,37 @@ exports.brandCreatePost = [
     }
   }),
 ];
+
+exports.brandDeleteGet = asyncHandler(async (req, res, next) => {
+  const [brand, brandsInItem] = await Promise.all([
+    Brand.findById(req.params.id).exec(),
+    Item.find({ brand: req.params.id }, "name").exec(),
+  ]);
+
+  if (brand === null) res.redirect("/inventory/brands");
+
+  res.render("brand_delete", {
+    title: "Delete Brand",
+    brand,
+    brand_items: brandsInItem,
+  });
+});
+
+exports.brandDeletePost = asyncHandler(async (req, res, next) => {
+  const [brand, brandsInItem] = await Promise.all([
+    Brand.findById(req.params.id).exec(),
+    Item.find({ brand: req.params.id }, "name").exec(),
+  ]);
+
+  if (brandsInItem.length > 0) {
+    res.render("brand_delete", {
+      title: "Delete Brand",
+      brand,
+      brand_items: brandsInItem,
+    });
+    return;
+  } else {
+    await Brand.findByIdAndDelete(req.params.id);
+    res.redirect("/inventory/brands");
+  }
+});
