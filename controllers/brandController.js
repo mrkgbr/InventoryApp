@@ -109,3 +109,16 @@ exports.brandDeletePost = asyncHandler(async (req, res, next) => {
     res.redirect("/inventory/brands");
   }
 });
+
+exports.brandUpdateGet = asyncHandler(async (req, res, next) => {
+  const brand = await Brand.findById(req.params.id).exec();
+
+  if (!brand) {
+    // No result
+    const err = new Error("Brand not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("brand_form", { title: "Update category", brand });
+});

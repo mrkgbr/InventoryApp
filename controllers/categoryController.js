@@ -111,3 +111,16 @@ exports.category_delete_post = asyncHandler(async (req, res, next) => {
     res.redirect("/inventory/categories");
   }
 });
+
+exports.categoryUpdateGet = asyncHandler(async (req, res, next) => {
+  const category = await Category.findById(req.params.id).exec();
+
+  if (!category) {
+    // No result
+    const err = new Error("Category not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  res.render("category_form", { title: "Update category", category });
+});

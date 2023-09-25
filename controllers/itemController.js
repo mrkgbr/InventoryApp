@@ -122,3 +122,27 @@ exports.itemDeletePost = asyncHandler(async (req, res, next) => {
     res.redirect("/inventory/items");
   }
 });
+
+exports.itemUpdateGet = asyncHandler(async (req, res, next) => {
+  const item = await Item.findById(req.params.id).exec();
+  const brands = await Brand.find().exec();
+  const categories = await Category.find().exec();
+  console.log(item);
+  if (!item) {
+    // No result
+    const err = new Error("Item not found");
+    err.status = 404;
+    return next(err);
+  }
+
+  // Mark our selected category as checked.
+  for (const category of categories) {
+    if (category._id.toString() === item.category._id.toString()) {
+      // Current category is selected. Set "checked" flag.
+      category.checked = "true";
+      console.log("true");
+    }
+  }
+
+  res.render("item_form", { title: "Update item", item, brands, categories });
+});
