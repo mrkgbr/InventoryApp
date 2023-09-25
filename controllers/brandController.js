@@ -122,3 +122,31 @@ exports.brandUpdateGet = asyncHandler(async (req, res, next) => {
 
   res.render("brand_form", { title: "Update category", brand });
 });
+
+exports.brandUpdatePost = [
+  body("name", "Brand name must contain at least 1 characters")
+    .trim()
+    .notEmpty({
+      ignore_whitespace: true,
+    })
+    .escape(),
+  asyncHandler(async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+    // Update a brand object with validated data
+    const brand = new Brand({ name: req.body.name, _id: req.params.id });
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again with sanitized values/error messages.
+      res.render("brand_form", {
+        title: "Create Brand",
+        brand,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data from form is valid. Update the record.
+      await Brand.findByIdAndUpdate(req.params.id, brand);
+      res.redirect(brand.url);
+    }
+  }),
+];

@@ -124,3 +124,30 @@ exports.categoryUpdateGet = asyncHandler(async (req, res, next) => {
 
   res.render("category_form", { title: "Update category", category });
 });
+
+exports.categoryUpdatePost = [
+  body("name", "Category name must contain at least 3 characters")
+    .trim()
+    .isLength({ min: 3 })
+    .escape(),
+  asyncHandler(async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+    // Update a brand object with validated data
+    const category = new Category({ name: req.body.name, _id: req.params.id });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again with sanitized values/error messages.
+      res.render("category_form", {
+        title: "Create Brand",
+        category,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data from form is valid. Update the record.
+      await Category.findByIdAndUpdate(req.params.id, category);
+      res.redirect(category.url);
+    }
+  }),
+];

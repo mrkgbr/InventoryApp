@@ -146,3 +146,49 @@ exports.itemUpdateGet = asyncHandler(async (req, res, next) => {
 
   res.render("item_form", { title: "Update item", item, brands, categories });
 });
+
+exports.itemUpdatePost = [
+  // Validate and sanitize fields.
+  body("name", "Product name must not be empty and at least 2 character long.")
+    .trim()
+    .isLength({ min: 2 })
+    .escape(),
+  body("description", "Description must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("price", "Price must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("brand.*").escape(),
+  body("category.*").escape(),
+  asyncHandler(async (req, res, next) => {
+    // Extract the validation errors from a request.
+    const errors = validationResult(req);
+    // Update a brand object with validated data
+    const item = new Item({
+      name: req.body.name,
+      description: req.body.description,
+      price: req.body.price,
+      number_of_stock: req.body.numberOfStock,
+      brand: req.body.brand,
+      category: req.body.category,
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      // There are errors. Render the form again with sanitized values/error messages.
+      res.render("item_form", {
+        title: "Create Item",
+        item,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      // Data from form is valid. Update the record.
+      await Item.findByIdAndUpdate(req.params.id, item);
+      res.redirect(item.url);
+    }
+  }),
+];
