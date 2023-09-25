@@ -4,7 +4,7 @@ const Item = require("../models/item");
 const { body, validationResult } = require("express-validator");
 
 // Display list of all Category.
-exports.brand_list = asyncHandler(async (req, res, next) => {
+exports.brandList = asyncHandler(async (req, res, next) => {
   const allBrands = await Brand.find().sort({ name: 1 }).exec();
   res.render("brand_list", {
     title: "Brand List",
@@ -12,7 +12,7 @@ exports.brand_list = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.brand_detail = asyncHandler(async (req, res, next) => {
+exports.brandDetail = asyncHandler(async (req, res, next) => {
   const [brand, itemsInBrand] = await Promise.all([
     Brand.findById(req.params.id).exec(),
     Item.find({ brand: req.params.id }).exec(),
@@ -31,7 +31,7 @@ exports.brand_detail = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.brand_create_get = (req, res, next) => {
+exports.brandCreateGet = (req, res, next) => {
   res.render("brand_form", { title: "Create Brand" });
 };
 

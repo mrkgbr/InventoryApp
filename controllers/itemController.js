@@ -4,7 +4,7 @@ const Item = require("../models/item");
 const Brand = require("../models/brand");
 const Category = require("../models/category");
 
-exports.item_list = asyncHandler(async (req, res, next) => {
+exports.itemList = asyncHandler(async (req, res, next) => {
   const allItems = await Item.find({}, "name brand")
     .sort({ name: 1 })
     .populate("brand")
@@ -12,7 +12,7 @@ exports.item_list = asyncHandler(async (req, res, next) => {
   res.render("item_list", { title: "Item List", list_item: allItems });
 });
 
-exports.item_detail = asyncHandler(async (req, res, next) => {
+exports.itemDetail = asyncHandler(async (req, res, next) => {
   const item = await Item.findById(req.params.id)
     .populate("brand")
     .populate("category")
@@ -26,7 +26,7 @@ exports.item_detail = asyncHandler(async (req, res, next) => {
   res.render("item_detail", { title: "Item Detail", detail_item: item });
 });
 
-exports.item_create_get = asyncHandler(async (req, res, next) => {
+exports.itemCreateGet = asyncHandler(async (req, res, next) => {
   const [allBrands, allCategories] = await Promise.all([
     Brand.find().exec(),
     Category.find().exec(),
@@ -39,7 +39,7 @@ exports.item_create_get = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.item_create_post = [
+exports.itemCreatePost = [
   // Validate and sanitize fields.
   body("name", "Product name must not be empty and at least 2 character long.")
     .trim()
@@ -83,7 +83,6 @@ exports.item_create_post = [
         if (category._id.toString() === req.body.category) {
           // Current category is selected. Set "checked" flag.
           category.checked = "true";
-          console.log("true");
         }
       }
       res.render("item_form", {
@@ -127,7 +126,6 @@ exports.itemUpdateGet = asyncHandler(async (req, res, next) => {
   const item = await Item.findById(req.params.id).exec();
   const brands = await Brand.find().exec();
   const categories = await Category.find().exec();
-  console.log(item);
   if (!item) {
     // No result
     const err = new Error("Item not found");
@@ -140,7 +138,6 @@ exports.itemUpdateGet = asyncHandler(async (req, res, next) => {
     if (category._id.toString() === item.category._id.toString()) {
       // Current category is selected. Set "checked" flag.
       category.checked = "true";
-      console.log("true");
     }
   }
 

@@ -4,7 +4,7 @@ const Category = require("../models/category");
 const Item = require("../models/item");
 
 // Display list of all Category.
-exports.category_list = asyncHandler(async (req, res, next) => {
+exports.categoryList = asyncHandler(async (req, res, next) => {
   const allCategories = await Category.find().sort({ name: 1 }).exec();
   res.render("category_list", {
     title: "Category List",
@@ -13,7 +13,7 @@ exports.category_list = asyncHandler(async (req, res, next) => {
 });
 
 // Display detail page for a specific Category
-exports.category_detail = asyncHandler(async (req, res, next) => {
+exports.categoryDetail = asyncHandler(async (req, res, next) => {
   const [category, itemInCategory] = await Promise.all([
     Category.findById(req.params.id).exec(),
     Item.find({ category: req.params.id }).exec(),
@@ -32,11 +32,11 @@ exports.category_detail = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.category_create_get = (req, res, next) => {
+exports.categoryCreateGet = (req, res, next) => {
   res.render("category_form", { title: "Create Category" });
 };
 
-exports.category_create_post = [
+exports.categoryCreatePost = [
   // Validate and sanitize the name field.
   body("name", "Category name must contain at least 3 characters")
     .trim()
@@ -76,7 +76,7 @@ exports.category_create_post = [
   }),
 ];
 
-exports.category_delete_get = asyncHandler(async (req, res, next) => {
+exports.categoryDeleteGet = asyncHandler(async (req, res, next) => {
   const [category, categoriesInItem] = await Promise.all([
     Category.findById(req.params.id).exec(),
     Item.find({ category: req.params.id }, "name").exec(),
@@ -93,7 +93,7 @@ exports.category_delete_get = asyncHandler(async (req, res, next) => {
   }
 });
 
-exports.category_delete_post = asyncHandler(async (req, res, next) => {
+exports.categoryDeletePost = asyncHandler(async (req, res, next) => {
   const [category, categoriesInItem] = await Promise.all([
     Category.findById(req.params.id).exec(),
     Item.find({ category: req.params.id }, "name").exec(),
